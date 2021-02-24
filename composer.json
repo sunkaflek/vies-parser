@@ -1,6 +1,6 @@
 {
     "name": "sunkaflek/vies-parser",
-    "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+    "description": "Parses adresses from VIES API",
     "license": "MIT",
     "require": {
         "php": ">=7.2"
