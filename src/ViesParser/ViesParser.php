@@ -6,6 +6,7 @@ namespace ViesParser;
 
 class ViesParser {
 
+    //Returns currently supported countries. Not all countries return all data, see RO for example
     public function get_supported_countries() {
         return ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL'];
     }
@@ -71,9 +72,6 @@ class ViesParser {
             $address_without_zip_and_city = substr($address_without_city, 0, $zip_pos);
             $street = trim($address_without_zip_and_city);
 
-            //$address_split = explode("\n", $address);
-            //$street = trim($address_split[1]);
-            //$city = trim($address_split[0]);
             return [
                 'address' => $address,
                 'street' => $street,
@@ -190,6 +188,7 @@ class ViesParser {
     }
 
     //https://gist.github.com/teomaragakis/7580134
+    //transliterates Greek characters to English
     private function make_greeklish($text) {
         $expressions = array(
            '/[αΑ][ιίΙΊ]/u' => 'e',
