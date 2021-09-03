@@ -1,13 +1,14 @@
 # vies-parser (WIP!)
 
-This component aims to parse addresses returned by VIES API (VAT Information Exchange System). Normally the API returns adresses as one string, instead of street, city, zip. This may be be a big issue for automation.
+This component aims to parse addresses returned by EU's VIES API (VAT Information Exchange System). Normally the API returns adresses as one string, instead of street, city, zip. This may be be a big issue for automation.
 
-Currently this library is able to parse only SK, BE and NL addresses, I hope to add more as I get more address data from another project.
+Supported countries are in get_supported_countries(), for v0.3 that is ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL']
+I hope to add more as I get more address data from another project.
 
 
 ## Installation
 
-To install the latest stable version use `composer require sunkaflek/vies-parser`.
+To install the latest version use `composer require sunkaflek/vies-parser`.
 
 
 ## Usage
