@@ -3,8 +3,14 @@
 declare(strict_types=1);
 namespace ViesParser;
 
-class ViesParser
-    {
+
+class ViesParser {
+
+    public function get_supported_countries() {
+        return ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL'];
+    }
+
+
     public function get_parsed_address($vat_number, $address) {
 
         $address = trim($address);
@@ -13,16 +19,16 @@ class ViesParser
         $newlines = substr_count($address, "\n" );
 
         /*
-        
         Only attempt parsing for countries tested, the rest returns false
         
         -DE does not return address on VIES at all
         -IE has pretty much unparsable addresses in VIES - split by commas, in different orders, without zip codes, often without street number etc
         -ES VIES does not return address unless you tell it what it is
         -RO does not have ZIP codes in VIES data, but we parse the rest. ZIP will return false - needs to be input by customer manualy
+        -EL additionaly gets transliterated to English characters (resulting in Greeklish)
 
         */
-        if (!in_array($country_code, ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL'])) {
+        if (!in_array($country_code, $this-> get_supported_countries())) {
             return false;
         }
 
@@ -185,50 +191,50 @@ class ViesParser
 
     //https://gist.github.com/teomaragakis/7580134
     private function make_greeklish($text) {
-      $expressions = array(
-       '/[αΑ][ιίΙΊ]/u' => 'e',
-       '/[οΟΕε][ιίΙΊ]/u' => 'i',
-       '/[αΑ][υύΥΎ]([θΘκΚξΞπΠσςΣτTφΡχΧψΨ]|\s|$)/u' => 'af$1',
-       '/[αΑ][υύΥΎ]/u' => 'av',
-       '/[εΕ][υύΥΎ]([θΘκΚξΞπΠσςΣτTφΡχΧψΨ]|\s|$)/u' => 'ef$1',
-       '/[εΕ][υύΥΎ]/u' => 'ev',
-       '/[οΟ][υύΥΎ]/u' => 'ou',
-       '/(^|\s)[μΜ][πΠ]/u' => '$1b',
-       '/[μΜ][πΠ](\s|$)/u' => 'b$1',
-       '/[μΜ][πΠ]/u' => 'mp',
-       '/[νΝ][τΤ]/u' => 'nt',
-       '/[τΤ][σΣ]/u' => 'ts',
-       '/[τΤ][ζΖ]/u' => 'tz',
-       '/[γΓ][γΓ]/u' => 'ng',
-       '/[γΓ][κΚ]/u' => 'gk',
-       '/[ηΗ][υΥ]([θΘκΚξΞπΠσςΣτTφΡχΧψΨ]|\s|$)/u' => 'if$1',
-       '/[ηΗ][υΥ]/u' => 'iu',
-       '/[θΘ]/u' => 'th',
-       '/[χΧ]/u' => 'ch',
-       '/[ψΨ]/u' => 'ps',
-       '/[αά]/u' => 'a',
-       '/[βΒ]/u' => 'v',
-       '/[γΓ]/u' => 'g',
-       '/[δΔ]/u' => 'd',
-       '/[εέΕΈ]/u' => 'e',
-       '/[ζΖ]/u' => 'z',
-       '/[ηήΗΉ]/u' => 'i',
-       '/[ιίϊΙΊΪ]/u' => 'i',
-       '/[κΚ]/u' => 'k',
-       '/[λΛ]/u' => 'l',
-       '/[μΜ]/u' => 'm',
-       '/[νΝ]/u' => 'n',
-       '/[ξΞ]/u' => 'x',
-       '/[οόΟΌ]/u' => 'o',
-       '/[πΠ]/u' => 'p',
-       '/[ρΡ]/u' => 'r',
-       '/[σςΣ]/u' => 's',
-       '/[τΤ]/u' => 't',
-       '/[υύϋΥΎΫ]/u' => 'i',
-       '/[φΦ]/iu' => 'f',
-       '/[ωώ]/iu' => 'o',
-       '/[Α]/iu' => 'a', //added as otherwise "A" kept as capitals
-       );
+        $expressions = array(
+           '/[αΑ][ιίΙΊ]/u' => 'e',
+           '/[οΟΕε][ιίΙΊ]/u' => 'i',
+           '/[αΑ][υύΥΎ]([θΘκΚξΞπΠσςΣτTφΡχΧψΨ]|\s|$)/u' => 'af$1',
+           '/[αΑ][υύΥΎ]/u' => 'av',
+           '/[εΕ][υύΥΎ]([θΘκΚξΞπΠσςΣτTφΡχΧψΨ]|\s|$)/u' => 'ef$1',
+           '/[εΕ][υύΥΎ]/u' => 'ev',
+           '/[οΟ][υύΥΎ]/u' => 'ou',
+           '/(^|\s)[μΜ][πΠ]/u' => '$1b',
+           '/[μΜ][πΠ](\s|$)/u' => 'b$1',
+           '/[μΜ][πΠ]/u' => 'mp',
+           '/[νΝ][τΤ]/u' => 'nt',
+           '/[τΤ][σΣ]/u' => 'ts',
+           '/[τΤ][ζΖ]/u' => 'tz',
+           '/[γΓ][γΓ]/u' => 'ng',
+           '/[γΓ][κΚ]/u' => 'gk',
+           '/[ηΗ][υΥ]([θΘκΚξΞπΠσςΣτTφΡχΧψΨ]|\s|$)/u' => 'if$1',
+           '/[ηΗ][υΥ]/u' => 'iu',
+           '/[θΘ]/u' => 'th',
+           '/[χΧ]/u' => 'ch',
+           '/[ψΨ]/u' => 'ps',
+           '/[αά]/u' => 'a',
+           '/[βΒ]/u' => 'v',
+           '/[γΓ]/u' => 'g',
+           '/[δΔ]/u' => 'd',
+           '/[εέΕΈ]/u' => 'e',
+           '/[ζΖ]/u' => 'z',
+           '/[ηήΗΉ]/u' => 'i',
+           '/[ιίϊΙΊΪ]/u' => 'i',
+           '/[κΚ]/u' => 'k',
+           '/[λΛ]/u' => 'l',
+           '/[μΜ]/u' => 'm',
+           '/[νΝ]/u' => 'n',
+           '/[ξΞ]/u' => 'x',
+           '/[οόΟΌ]/u' => 'o',
+           '/[πΠ]/u' => 'p',
+           '/[ρΡ]/u' => 'r',
+           '/[σςΣ]/u' => 's',
+           '/[τΤ]/u' => 't',
+           '/[υύϋΥΎΫ]/u' => 'i',
+           '/[φΦ]/iu' => 'f',
+           '/[ωώ]/iu' => 'o',
+           '/[Α]/iu' => 'a', //added as otherwise "A" kept as capitals
+        );
 
        $text = preg_replace( array_keys($expressions), array_values($expressions), $text);
        return $text;
