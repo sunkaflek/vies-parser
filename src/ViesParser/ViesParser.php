@@ -8,7 +8,7 @@ class ViesParser {
 
     //Returns currently supported countries. Not all countries return all data, see RO for example
     public function get_supported_countries() {
-        return ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL'];
+        return ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL', 'DK', 'EE'];
     }
 
 
@@ -33,7 +33,7 @@ class ViesParser {
             return false;
         }
 
-        if ($newlines == 1 and in_array($country_code, ['NL', 'BE', 'FR', 'FI', 'AT', 'PL']) ){ //Countries in expected format
+        if ($newlines == 1 and in_array($country_code, ['NL', 'BE', 'FR', 'FI', 'AT', 'PL', 'DK']) ){ //Countries in expected format
             $address_split = explode("\n", $address);
             $street = $address_split[0];
             list($zip, $city) = explode(" ", $address_split[1], 2);
@@ -174,6 +174,22 @@ class ViesParser {
             } else {
                 list($zip, $city) = explode(" ", $address_split[1], 2);
             }
+            return [
+                'address' => $address,
+                'street' => $street,
+                'zip' => $zip,
+                'city' => $city,
+                'country_code' => $country_code
+            ];
+        }
+
+        if ($newlines == 0 and in_array($country_code, ['EE']) ){
+            $address_split = explode("  ", $address);
+            foreach ($address_split as $key => $value) { //sometimes they have more than 2 space as divider, we trim the additional ones here
+                $address_split[$key] = trim($address_split[$key]);
+            }
+            $street = $address_split[0];
+            list($zip, $city) = explode(" ", $address_split[1], 2);
             return [
                 'address' => $address,
                 'street' => $street,
