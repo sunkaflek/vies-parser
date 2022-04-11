@@ -183,7 +183,7 @@ class ViesParser {
             ];
         }
 
-        if ($newlines == 0 and in_array($country_code, ['EE']) ){
+        if ($newlines == 0 and in_array($country_code, ['EE']) and strpos($address, "  ") !== false){
             $address_split = explode("  ", $address);
             foreach ($address_split as $key => $value) { //sometimes they have more than 2 space as divider, we trim the additional ones here
                 $address_split[$key] = trim($address_split[$key]);
