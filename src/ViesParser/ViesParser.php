@@ -8,7 +8,7 @@ class ViesParser {
 
     //Returns currently supported countries. Not all countries return all data, see RO for example
     public function get_supported_countries() {
-        return ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL', 'DK', 'EE'];
+        return ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL', 'DK', 'EE', 'CZ'];
     }
 
 
@@ -198,6 +198,35 @@ class ViesParser {
                 'country_code' => $country_code
             ];
         }
+
+        if ($newlines == 1 and in_array($country_code, ['CZ']) ){ //Countries in expected format
+            $address_split = explode("\n", $address);
+            $street = $address_split[0];
+            $pos = strpos($address_split[1], ' ', strpos($address_split[1], ' ') + 1); //second space marks ending of ZIP code
+            list($zip, $city) = [substr($address_split[1], 0, $pos), substr($address_split[1], $pos)];
+            return [
+                'address' => $address,
+                'street' => $street,
+                'zip' => $zip,
+                'city' => $city,
+                'country_code' => $country_code
+            ];
+        }
+
+        if ($newlines == 2 and in_array($country_code, ['CZ']) ){ //Countries in expected format
+            $address_split = explode("\n", $address);
+            $street = $address_split[0] . ', '. $address_split[1];
+            $pos = strpos($address_split[2], ' ', strpos($address_split[2], ' ') + 1); //second space marks ending of ZIP code
+            list($zip, $city) = [substr($address_split[2], 0, $pos), substr($address_split[2], $pos)];
+            return [
+                'address' => $address,
+                'street' => $street,
+                'zip' => $zip,
+                'city' => $city,
+                'country_code' => $country_code
+            ];
+        }
+
 
         return false;
 
