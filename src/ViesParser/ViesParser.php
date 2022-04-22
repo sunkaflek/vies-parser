@@ -203,6 +203,7 @@ class ViesParser {
             $address_split = explode("\n", $address);
             $street = $address_split[0];
             $pos = strpos($address_split[1], ' ', strpos($address_split[1], ' ') + 1); //second space marks ending of ZIP code
+            if ($pos === false) return false;
             list($zip, $city) = [substr($address_split[1], 0, $pos), substr($address_split[1], $pos)];
             return [
                 'address' => $address,
@@ -217,6 +218,7 @@ class ViesParser {
             $address_split = explode("\n", $address);
             $street = $address_split[0] . ', '. $address_split[1];
             $pos = strpos($address_split[2], ' ', strpos($address_split[2], ' ') + 1); //second space marks ending of ZIP code
+            if ($pos === false) return false;
             list($zip, $city) = [substr($address_split[2], 0, $pos), substr($address_split[2], $pos)];
             return [
                 'address' => $address,
