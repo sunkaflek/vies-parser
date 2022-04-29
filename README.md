@@ -1,9 +1,12 @@
-# vies-parser (WIP!)
+# vies-parser
 
-This component aims to parse addresses returned by EU's VIES API (VAT Information Exchange System). Normally the API returns adresses as one string, instead of street, city, zip. This may be be a big issue for automation.
+This library aims to parse addresses returned by EU's VIES API (VAT Information Exchange System). Normally the API returns adresses as one string, instead of street, city, zip. This may be be a big issue for automation.
 
-Supported countries are in get_supported_countries(), for v0.3 that is ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL']
-I hope to add more as I get more address data from another project.
+Supported countries are in get_supported_countries(), currently that is ['SK', 'NL', 'BE', 'FR', 'PT', 'IT', 'FI', 'RO', 'SI', 'AT', 'PL', 'HR', 'EL', 'DK', 'EE', 'CZ'].
+
+I try to add more countries and/or tweak the parser as I get more data from a project in production.
+
+Please note that for some countries (e.g. DE, IE) it is not possible to parse address at all, since the VIES API does not return it or is too inconsistent.
 
 
 ## Installation
