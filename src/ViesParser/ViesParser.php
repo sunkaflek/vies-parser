@@ -39,10 +39,10 @@ class ViesParser {
             list($zip, $city) = explode(" ", $address_split[1], 2);
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -54,10 +54,10 @@ class ViesParser {
             list($zip, $city) = explode(" ", trim($address_split[array_key_last($address_split)]), 2);
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -74,10 +74,10 @@ class ViesParser {
 
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -88,10 +88,10 @@ class ViesParser {
             $city = trim($address_split[0]);
             return [
                 'address' => $address,
-                'street' => $street,
+                'street' => trim($street),
                 'zip' => false,
-                'city' => $city,
-                'country_code' => $country_code
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -103,10 +103,10 @@ class ViesParser {
             $city = trim($address_split[0]);
             return [
                 'address' => $address,
-                'street' => $street,
+                'street' => trim($street),
                 'zip' => false,
-                'city' => $city,
-                'country_code' => $country_code
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -116,10 +116,10 @@ class ViesParser {
             list($zip, $city) = explode(" ", $address_split[1], 2);
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -130,10 +130,10 @@ class ViesParser {
             list($zip) = explode(" ", $address_split[2], 2);
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -144,10 +144,10 @@ class ViesParser {
             list($zip, $city) = explode(" ", $address_split[2], 2);
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -157,10 +157,10 @@ class ViesParser {
             list($zip, $city) = explode(" ", $address_split[1], 2);
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -176,10 +176,10 @@ class ViesParser {
             }
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -192,10 +192,10 @@ class ViesParser {
             list($zip, $city) = explode(" ", $address_split[1], 2);
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -207,10 +207,10 @@ class ViesParser {
             list($zip, $city) = [substr($address_split[1], 0, $pos), substr($address_split[1], $pos)];
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
@@ -222,10 +222,10 @@ class ViesParser {
             list($zip, $city) = [substr($address_split[2], 0, $pos), substr($address_split[2], $pos)];
             return [
                 'address' => $address,
-                'street' => $street,
-                'zip' => $zip,
-                'city' => $city,
-                'country_code' => $country_code
+                'street' => trim($street),
+                'zip' => trim($zip),
+                'city' => trim($city),
+                'country_code' => trim($country_code)
             ];
         }
 
