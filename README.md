@@ -39,6 +39,15 @@ if ($parsed_address) {
 
 ```
 
+## Options
+So far, there is one option that can be passed as follows:
+```php
+$parser->get_parsed_address($vat, $address, ['sk_delete_mc']);
+```
+
+sk_delete_mc deletes "Mestka cast" or its abbreviation "m. c. " from the city name for Slovakian VATs. This is to save space, it is unnecessary to have it in an address
+
+
 ## Notes
 
 Adresses from VIES API can be obtained for example using the excelent library https://github.com/DragonBe/vies

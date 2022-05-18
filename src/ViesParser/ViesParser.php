@@ -12,7 +12,7 @@ class ViesParser {
     }
 
 
-    public function get_parsed_address($vat_number, $address) {
+    public function get_parsed_address($vat_number, $address, $config_flags = []) {
 
         $address = trim($address);
         $vat = trim($vat_number);
@@ -155,6 +155,10 @@ class ViesParser {
             $address_split = explode("\n", $address);
             $street = $address_split[0];
             list($zip, $city) = explode(" ", $address_split[1], 2);
+            if (in_array('sk_delete_mc', $config_flags)) {
+                $city = str_replace('mestská časť ', '', $city);
+                $city = str_replace('m. č. ', '', $city);
+            }
             return [
                 'address' => $address,
                 'street' => trim($street),
@@ -174,6 +178,12 @@ class ViesParser {
             } else {
                 list($zip, $city) = explode(" ", $address_split[1], 2);
             }
+
+            if (in_array('sk_delete_mc', $config_flags)) {
+                $city = str_replace('mestská časť ', '', $city);
+                $city = str_replace('m. č. ', '', $city);
+            }
+            
             return [
                 'address' => $address,
                 'street' => trim($street),
