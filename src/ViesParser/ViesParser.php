@@ -26,7 +26,7 @@ class ViesParser {
         -IE has pretty much unparsable addresses in VIES - split by commas, in different orders, without zip codes, often without street number etc
         -ES VIES does not return address unless you tell it what it is
         -RO does not have ZIP codes in VIES data, but we parse the rest. ZIP will return false - needs to be input by customer manualy
-        -EL additionaly gets transliterated to English characters (resulting in Greeklish)
+        -EL additionaly gets transliterated to English characters (resulting in Greeklish - if not excluded by config flags)
 
         */
         if (!in_array($country_code, $this-> get_supported_countries())) {
@@ -63,7 +63,11 @@ class ViesParser {
 
 
         if ($newlines == 0 and in_array($country_code, ['EL']) ){
-            $address = $this->make_greeklish($address);
+            if (in_array('do_not_greeklish', $config_flags)) {
+                $address = $address;
+            } else {
+                $address = $this->make_greeklish($address);
+            }
             $hyphen_pos = strpos($address, ' - ');
             $city = substr($address, $hyphen_pos+3);
             $address_without_city = substr($address, 0, $hyphen_pos);

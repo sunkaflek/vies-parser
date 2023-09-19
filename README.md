@@ -40,12 +40,15 @@ if ($parsed_address) {
 ```
 
 ## Options
-So far, there is one option that can be passed as follows:
+Options are passed in an array in the third parameter of the call to get_parsed_address, for example:
 ```php
 $parser->get_parsed_address($vat, $address, ['sk_delete_mc']);
 ```
 
-sk_delete_mc deletes "Mestka cast" or its abbreviation "m. c. " from the city name for Slovakian VATs. This is to save space, it is unnecessary to have it in an address
+Available options are:
+
+- ```sk_delete_mc``` deletes "Mestka cast" or its abbreviation "m. c. " from the city name for Slovakian VATs. This is to save space, it is unnecessary to have it in an address
+- ```do_not_greeklish``` do not attempt to convert Greek language addresses to latin characters
 
 
 ## Notes
