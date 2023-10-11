@@ -198,10 +198,8 @@ class ViesParser {
         }
 
         if ($newlines == 0 and in_array($country_code, ['EE']) and strpos($address, "  ") !== false){
+            $address = preg_replace('/ {3,}/', '  ', $address); //sometimes they have more than 2 space as divider, we trim the additional ones here
             $address_split = explode("  ", $address);
-            foreach ($address_split as $key => $value) { //sometimes they have more than 2 space as divider, we trim the additional ones here
-                $address_split[$key] = trim($address_split[$key]);
-            }
             $street = $address_split[0];
             list($zip, $city) = explode(" ", $address_split[1], 2);
             return [
