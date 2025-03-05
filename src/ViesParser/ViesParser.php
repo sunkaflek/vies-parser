@@ -86,7 +86,7 @@ class ViesParser {
         }
         
         //Romania new format
-        if ($newlines == 0 and in_array($country_code, ['RO']) ){
+        if ($newlines == 0 and in_array($country_code, ['RO']) and str_contains($address, ',') and str_contains($address, 'SECTOR') and str_contains($address, 'STR')){
             $address_split = explode(",", $address);
             $street = trim($address_split[1]);
             $city = trim($address_split[0]);
