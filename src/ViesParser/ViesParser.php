@@ -84,6 +84,33 @@ class ViesParser {
                 'country_code' => trim($country_code)
             ];
         }
+        
+        //Romania new format
+        if ($newlines == 0 and in_array($country_code, ['RO']) ){
+            $address_split = explode(",", $address);
+            $street = trim($address_split[1]);
+            $city = trim($address_split[0]);
+            
+            if (preg_match('/SECTOR\s+(\d+)/i', $street, $matches)) {
+                $city .= ' ' . $matches[0]; // Return the full "SECTOR X" match
+                // Remove the matched sector from the original string
+                $street = preg_replace('/'.preg_quote($matches[0], '/').'\s*/', '', $street, 1);
+            }
+            
+            if (preg_match('/^(\d+)(?=\s+STR\.)/i', $street, $matches)) {
+                $zip = $matches[1]; // Get the captured number
+                // Remove the zip from the original string
+                $street = preg_replace('/^' . preg_quote($matches[1], '/') . '\s+/i', '', $street);
+            }
+            
+            return [
+                'address' => $address,
+                'street' => $street,
+                'zip' => $zip,
+                'city' => $city,
+                'country_code' => $country_code
+            ];
+        }
 
         //Romania does not have ZIP codes in VIES data
         if ($newlines == 1 and in_array($country_code, ['RO']) ){
