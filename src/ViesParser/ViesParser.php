@@ -14,6 +14,10 @@ class ViesParser {
 
     public function get_parsed_address($vat_number, $address, $config_flags = []) {
 
+        if (!is_string($vat_number) or !is_string($address)) {
+            return false;
+        }
+
         $address = trim($address);
         $vat = trim($vat_number);
         $country_code = substr($vat, 0, 2);
@@ -36,7 +40,8 @@ class ViesParser {
         if ($newlines == 1 and in_array($country_code, ['NL', 'BE', 'FR', 'FI', 'AT', 'PL', 'DK']) ){ //Countries in expected format
             $address_split = explode("\n", $address);
             $street = $address_split[0];
-            list($zip, $city) = explode(" ", $address_split[1], 2);
+            if (($zip_city = $this->split_zip_city($address_split[1])) === false) return false;
+            list($zip, $city) = $zip_city;
             return [
                 'address' => $address,
                 'street' => trim($street),
@@ -51,7 +56,8 @@ class ViesParser {
             $address_split = explode(",", $address);
             $street = $address_split[0];
             if (count($address_split) == 3) $street = $street . ', ' . trim($address_split[1]); //sometimes they have aditional thing after street, seems to be city, but better not to omit
-            list($zip, $city) = explode(" ", trim($address_split[array_key_last($address_split)]), 2);
+            if (($zip_city = $this->split_zip_city($address_split[array_key_last($address_split)])) === false) return false;
+            list($zip, $city) = $zip_city;
             return [
                 'address' => $address,
                 'street' => trim($street),
@@ -69,9 +75,11 @@ class ViesParser {
                 $address = $this->make_greeklish($address);
             }
             $hyphen_pos = strpos($address, ' - ');
+            if ($hyphen_pos === false) return false;
             $city = substr($address, $hyphen_pos+3);
             $address_without_city = substr($address, 0, $hyphen_pos);
             $zip_pos = strrpos($address_without_city, ' ');
+            if ($zip_pos === false) return false;
             $zip = substr($address_without_city, $zip_pos+1);
             $address_without_zip_and_city = substr($address_without_city, 0, $zip_pos);
             $street = trim($address_without_zip_and_city);
@@ -88,9 +96,11 @@ class ViesParser {
         //Romania new format
         if ($newlines == 0 and in_array($country_code, ['RO']) and str_contains($address, ',') and str_contains($address, 'SECTOR') and str_contains($address, 'STR')){
             $address_split = explode(",", $address);
+            if (count($address_split) < 2) return false;
             $street = trim($address_split[1]);
             $city = trim($address_split[0]);
-            
+            $zip = false;
+
             if (preg_match('/SECTOR\s+(\d+)/i', $street, $matches)) {
                 $city .= ' ' . $matches[0]; // Return the full "SECTOR X" match
                 // Remove the matched sector from the original string
@@ -144,7 +154,8 @@ class ViesParser {
         if ($newlines == 1 and in_array($country_code, ['IT']) ){
             $address_split = explode("\n", $address);
             $street = $address_split[0];
-            list($zip, $city) = explode(" ", $address_split[1], 2);
+            if (($zip_city = $this->split_zip_city($address_split[1])) === false) return false;
+            list($zip, $city) = $zip_city;
             return [
                 'address' => $address,
                 'street' => trim($street),
@@ -172,7 +183,8 @@ class ViesParser {
         if ($newlines == 2 and in_array($country_code, ['FR']) ){ 
             $address_split = explode("\n", $address);
             $street = $address_split[0] .', '. $address_split[1] ;
-            list($zip, $city) = explode(" ", $address_split[2], 2);
+            if (($zip_city = $this->split_zip_city($address_split[2])) === false) return false;
+            list($zip, $city) = $zip_city;
             return [
                 'address' => $address,
                 'street' => trim($street),
@@ -185,7 +197,8 @@ class ViesParser {
         if ($newlines == 2 and in_array($country_code, ['SK']) ){ //Vetsina SK address
             $address_split = explode("\n", $address);
             $street = $address_split[0];
-            list($zip, $city) = explode(" ", $address_split[1], 2);
+            if (($zip_city = $this->split_zip_city($address_split[1])) === false) return false;
+            list($zip, $city) = $zip_city;
             if (in_array('sk_delete_mc', $config_flags)) {
                 $city = str_replace('mestská časť ', '', $city);
                 $city = str_replace('m. č. ', '', $city);
@@ -204,11 +217,12 @@ class ViesParser {
             $address_split = explode("\n", $address);
             $street = $address_split[0];
             if ($address_split[1] === 'Slovensko') {
-                list($zip, $city) = explode(" ", $address_split[0], 2);
+                if (($zip_city = $this->split_zip_city($address_split[0])) === false) return false;
                 $street = ''; //v techto pripadech nemame ulici a cislo popisne, tj. nesmime prepisovat
             } else {
-                list($zip, $city) = explode(" ", $address_split[1], 2);
+                if (($zip_city = $this->split_zip_city($address_split[1])) === false) return false;
             }
+            list($zip, $city) = $zip_city;
 
             if (in_array('sk_delete_mc', $config_flags)) {
                 $city = str_replace('mestská časť ', '', $city);
@@ -228,7 +242,8 @@ class ViesParser {
             $address = preg_replace('/ {3,}/', '  ', $address); //sometimes they have more than 2 space as divider, we trim the additional ones here
             $address_split = explode("  ", $address);
             $street = $address_split[0];
-            list($zip, $city) = explode(" ", $address_split[1], 2);
+            if (($zip_city = $this->split_zip_city($address_split[1])) === false) return false;
+            list($zip, $city) = $zip_city;
             return [
                 'address' => $address,
                 'street' => trim($street),
@@ -271,6 +286,13 @@ class ViesParser {
 
         return false;
 
+    }
+
+    //VIES sometimes returns a line without the expected "ZIP CITY" space separator - address is then unparsable
+    private function split_zip_city($line) {
+        $parts = explode(" ", trim($line), 2);
+        if (count($parts) < 2) return false;
+        return $parts;
     }
 
     //https://gist.github.com/teomaragakis/7580134
