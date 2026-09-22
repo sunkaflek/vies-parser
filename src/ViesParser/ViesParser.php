@@ -107,7 +107,8 @@ class ViesParser {
                 $street = preg_replace('/'.preg_quote($matches[0], '/').'\s*/', '', $street, 1);
             }
             
-            if (preg_match('/^(\d+)(?=\s+STR\.)/i', $street, $matches)) {
+            // "061013 STR. X" as well as "00000 STR X" (VIES sometimes omits the dot)
+            if (preg_match('/^(\d+)(?=\s+STR\b\.?)/i', $street, $matches)) {
                 $zip = $matches[1]; // Get the captured number
                 // Remove the zip from the original string
                 $street = preg_replace('/^' . preg_quote($matches[1], '/') . '\s+/i', '', $street);
